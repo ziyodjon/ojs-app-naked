@@ -1,0 +1,31 @@
+version: "3"
+services:
+  ojs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - /var/www/html/files
+      - .:/var/www/html
+    depends_on:
+      - mysql
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DATABASE=ojs
+      - MYSQL_USER=ojs_user
+      - MYSQL_PASSWORD=ojs_password
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=ojs
+      - MYSQL_USER=ojs_user
+      - MYSQL_PASSWORD=ojs_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - "ojs-mysql:/var/lib/mysql"
+volumes:
+  ojs-mysql:
+    driver: local
